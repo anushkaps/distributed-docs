@@ -87,10 +87,10 @@ Multiple clients can be started simultaneously in different terminals.
 
 ### Access Control
 
-| Command           | Syntax                                       | Description                               |
-| ----------------- | -------------------------------------------- | ----------------------------------------- |
-| **ADDACCESS**     | `ADDACCESS <filename> <username> -R` or `-W` | Grant read (-R) or write (-W) access      |
-| **REMACCESS**     | `REMACCESS <filename> <username>`            | Revoke user access                        |
+| Command       | Syntax                                       | Description                          |
+| ------------- | -------------------------------------------- | ------------------------------------ |
+| **ADDACCESS** | `ADDACCESS <filename> <username> -R` or `-W` | Grant read (-R) or write (-W) access |
+| **REMACCESS** | `REMACCESS <filename> <username>`            | Revoke user access                   |
 
 ### Execution
 

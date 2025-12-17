@@ -11,7 +11,6 @@ This document contains comprehensive details about the LangOS distributed docume
 - [Example Workflows](#example-workflows)
 - [Troubleshooting](#troubleshooting)
 - [File Storage](#file-storage)
-- [Advanced Features](#advanced-features)
 
 ---
 
@@ -91,20 +90,6 @@ The system follows a client-server architecture with three main components:
 - ✅ **Error Handling:** Comprehensive error codes and messages
   - Universal error codes throughout the system
   - Clear error messages for all failure scenarios
-
-### Bonus Features (Implemented)
-
-- ✅ **Checkpoints:** Save and revert file states
-
-  - Create checkpoints with custom names
-  - View checkpoint content
-  - Revert files to previous checkpoints
-  - List all checkpoints for a file
-
-- ✅ **Access Requests:** Request-based access control
-  - Users can request read/write access
-  - Owners can view and approve/reject requests
-  - No push notifications needed
 
 ### Architecture Notes
 
@@ -219,50 +204,6 @@ cd client
 5. Restart the stopped Storage Server
 6. Verify it re-registers and files are still accessible
 
-### Access Control Testing
-
-**Test 5: Access Request Workflow**
-
-```bash
-# User alice creates a file
-> CREATE private.txt
-> WRITE private.txt 0
-> 0 Private content
-> ETIRW
-
-# User bob requests access
-# (In bob's client)
-> REQUESTACCESS -R private.txt
-
-# User alice views and approves
-# (In alice's client)
-> VIEWREQUESTS private.txt
-> APPROVE private.txt bob
-
-# User bob can now read
-# (In bob's client)
-> READ private.txt
-```
-
-### Checkpoint Testing
-
-**Test 6: Create and Revert Checkpoint**
-
-```bash
-> CREATE version.txt
-> WRITE version.txt 0
-> 0 Version 1
-> ETIRW
-> CHECKPOINT version.txt v1
-> WRITE version.txt 0
-> 0 Version 2
-> ETIRW
-> VIEWCHECKPOINT version.txt v1
-> REVERT version.txt v1
-> READ version.txt
-# Should show Version 1
-```
-
 ---
 
 ## Example Workflows
@@ -292,7 +233,6 @@ cd client
 > 2 Phase 2: Implementation
 > ETIRW
 > ADDACCESS project.txt bob -W
-> CHECKPOINT project.txt initial
 ```
 
 **Bob (Client 2):**
@@ -310,8 +250,6 @@ cd client
 
 ```bash
 > READ project.txt
-> VIEWCHECKPOINT project.txt initial
-> LISTCHECKPOINTS project.txt
 ```
 
 ---
@@ -351,7 +289,7 @@ If you see "port already in use" errors:
 
 - Verify you have the correct permissions (owner or granted access)
 - Use `INFO <filename>` to check file ownership and access list
-- Request access using `REQUESTACCESS` if you're not the owner
+- Contact the file owner to request access
 
 ---
 
@@ -360,7 +298,6 @@ If you see "port already in use" errors:
 - Storage Servers store files in `./storage_current/` directory
 - Each Storage Server has its own `storage_current/` directory
 - File metadata is stored in binary format with `.dat` extension
-- Checkpoints are stored as separate files
 - Logs are written to `name_server.log` and `storage_server.log`
 
 ### Cleanup
@@ -377,29 +314,6 @@ rm -f storage_server/storage_server_info.txt
 ---
 
 ## Advanced Features
-
-### Checkpoints
-
-Checkpoints allow you to save file states at specific points in time and revert to them if needed. This is useful for version control and recovery.
-
-**Usage:**
-
-- `CHECKPOINT <filename> <checkpoint_name>` - Create a checkpoint
-- `LISTCHECKPOINTS <filename>` - List all checkpoints
-- `VIEWCHECKPOINT <filename> <checkpoint_name>` - View checkpoint content
-- `REVERT <filename> <checkpoint_name>` - Revert to checkpoint
-
-### Access Requests
-
-The access request system allows users to request access to files they don't own. Owners can view and approve/reject these requests.
-
-**Usage:**
-
-- `REQUESTACCESS -R <filename>` - Request read access
-- `REQUESTACCESS -W <filename>` - Request write access
-- `VIEWREQUESTS <filename>` - View pending requests (owner only)
-- `APPROVE <filename> <username>` - Approve a request (owner only)
-- `REJECT <filename> <username>` - Reject a request (owner only)
 
 ### Sentence-Level Locking
 
@@ -472,8 +386,7 @@ The system uses comprehensive error codes for all failure scenarios:
 - **Resource Contention Errors (400-499)**: Resource locked, concurrent write conflict, etc.
 - **System/Network Errors (500-599)**: Server unavailable, connection failed, etc.
 - **Validation Errors (600-699)**: Invalid command, invalid parameters, etc.
-- **Data/State Errors (700-799)**: No undo history, checkpoint not found, etc.
-- **Access Request Errors (800-899)**: Request not found, already exists, etc.
+- **Data/State Errors (700-799)**: No undo history, etc.
 
 All error codes include human-readable error messages.
 

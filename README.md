@@ -91,19 +91,6 @@ Multiple clients can be started simultaneously in different terminals.
 | ----------------- | -------------------------------------------- | ----------------------------------------- |
 | **ADDACCESS**     | `ADDACCESS <filename> <username> -R` or `-W` | Grant read (-R) or write (-W) access      |
 | **REMACCESS**     | `REMACCESS <filename> <username>`            | Revoke user access                        |
-| **REQUESTACCESS** | `REQUESTACCESS -R <filename>` or `-W`        | Request access to a file                  |
-| **VIEWREQUESTS**  | `VIEWREQUESTS <filename>`                    | View pending access requests (owner only) |
-| **APPROVE**       | `APPROVE <filename> <username>`              | Approve an access request (owner only)    |
-| **REJECT**        | `REJECT <filename> <username>`               | Reject an access request (owner only)     |
-
-### Checkpoint Operations
-
-| Command             | Syntax                                        | Description                     |
-| ------------------- | --------------------------------------------- | ------------------------------- |
-| **CHECKPOINT**      | `CHECKPOINT <filename> <checkpoint_name>`     | Create a checkpoint (snapshot)  |
-| **LISTCHECKPOINTS** | `LISTCHECKPOINTS <filename>`                  | List all checkpoints for a file |
-| **VIEWCHECKPOINT**  | `VIEWCHECKPOINT <filename> <checkpoint_name>` | View a specific checkpoint      |
-| **REVERT**          | `REVERT <filename> <checkpoint_name>`         | Revert file to a checkpoint     |
 
 ### Execution
 
